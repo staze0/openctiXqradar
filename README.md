@@ -30,7 +30,7 @@ This program have 4 main functions :
 
 You will find more details in this schema :
 
-![openctixqradar_functions](https://user-images.githubusercontent.com/125818256/219971032-7dbf4b86-a7a5-47ce-addb-97819666d332.png)
+![openctixqradar_functions](https://github.com/staze0/openctiXqradar/blob/819ca49e6cf84d4556c5f2dff1384b38d895c8c6/openctixqradar_functions.png)
 
 Finally, all the function are commented with much more details.
 
