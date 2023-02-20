@@ -19,6 +19,14 @@ OpenCTI x QRadar project aims to populate QRadar referentials with OpenCTI datas
 
 ---
 
+### Prerequisites :
+
++ OpenCTI account (it's free, just go on the link in sources and register) or you can setup your own OpenCTI server, it's up to you :smile:
++ QRadar instance, you can use QRadar Community Edition, it's quite easy to setup and it's also free
++ Machine with Python3 where you can execute the code
+
+---
+
 ### Program description
 
 This program have 4 main functions :
