@@ -13,7 +13,7 @@ For those who don't know OpenCTI, it is a cyber threat intelligence (CTI) platfo
 
 ---
 
-### Purpose of the project
+### Purpose of the project :
 
 OpenCTI x QRadar project aims to populate QRadar referentials with OpenCTI datas which are cyber threats. The first version will only focus on IPv4 threat.
 
