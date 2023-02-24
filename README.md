@@ -22,7 +22,10 @@ OpenCTI x QRadar project aims to populate QRadar referentials with OpenCTI datas
 ### Prerequisites :
 
 + OpenCTI account (it's free, just go on the link in sources and register) or you can setup your own OpenCTI server, it's up to you :smile:
-+ QRadar instance, you can use QRadar Community Edition, it's quite easy to setup and it's also free
+  + Get your API token throught the profile page on OpenCTI platform then the value under "API access" box
++ QRadar instance, you can use QRadar Community Edition, it's quite easy to setup and it's also free (I wrote an article about the installation, you will find the link in sources)
+  + Get "Authorized services" token with "Admin" permission
+  + Create a reference map in order to store malicious artefacts
 + Machine with Python3 where you can execute the code
 
 ---
@@ -54,3 +57,4 @@ Finally, all the function are commented with much more details.
 
 + [OpenCTI GitHub page](https://github.com/OpenCTI-Platform/opencti)
 + [QRadar Community Edition main page](https://www.ibm.com/community/qradar/ce/)
++ [QRadar CE installation & first configuration](https://staze.fr/comment-surveiller-vos-equipements-partie-1/)
