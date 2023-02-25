@@ -569,8 +569,6 @@ def check_args(arg_ndays):
 
 if __name__ == '__main__':
 
-	global DEBUG
-
 	program_args = argument_parser.parse_args()
 	check_args(program_args.ndays)
 	
