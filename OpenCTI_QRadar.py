@@ -563,9 +563,9 @@ def main(ndays = 1):
 		pprint(""" Cleaning of IPv4 in QRadar : Success """.center(100, "="), "INFO")
 
 def check_args(arg_ndays):
-    if not 0 < arg_ndays < 7:
-        raise argparse.ArgumentTypeError("0 < ndays < 7")
-    return
+	if not 0 < arg_ndays < 7:
+		raise argparse.ArgumentTypeError("0 < ndays < 7")
+	return
 
 if __name__ == '__main__':
 
