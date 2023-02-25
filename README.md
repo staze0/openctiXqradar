@@ -1,6 +1,6 @@
 # OpenCTI x QRadar
 
-### Version history :
+### Versions status :
 
 + 1.0 : March 2023 :calendar:
 + 1.1 : March 2023 :calendar:
