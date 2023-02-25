@@ -2,7 +2,12 @@
 
 ### Version history :
 
-+ 1.0 : Coming soon :calendar:
++ 1.0 : March 2023 :calendar:
++ 1.1 : March 2023 :calendar:
+  + Implementation of requirements file
+  + Review of examples in the readme
++ 1.2 : April 2023 :calendar:
+  + Implementation of choices in the action you want
 
 ---
 
@@ -49,7 +54,33 @@ Finally, all the function are commented with much more details.
 
 ### Examples :
 
-*Coming soon :calendar:*
+First of all you need to fill _secrets.py_ file with OpenCTI token and QRadar token. Second of all, in the _variables.py_ file you need to modify the QRadar endpoint URL and the referential in QRadar you want to populate with IoC. To sum up, here the variable you need to modify :
+1. **<QRadar_TOKEN>** in _secrets.py_
+2. **<OpenCTI_TOKEN>** in _secrets.py_
+3. **<QRadar_URL>** in _variables.py_
+4. **<QRadar_referential_name>** in _variables.py_
+If you use your own OpenCTI instance, you will need to change the endpoint URL at the begining of the _variables.py_ file.
+
+Then, you can go ahead and try :
+
+```bash
+PS > python.exe .\OpenCTI_QRadar.py -h
+usage: OpenCTI_QRadar.py [-h] [-v {DEBUG,INFO,ERRORONLY} | -q] [-d NDAYS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v {DEBUG,INFO,ERRORONLY}, --verbosity {DEBUG,INFO,ERRORONLY}
+                        increase output verbosity
+  -q, --quiet           run script without output
+  -d NDAYS, --ndays NDAYS
+                        specify number of days to request (0 < ndays < 7)
+```
+
+It will print out the help message. Then, if you want to get IoC of OpenCTI from the last 2 days and populate your QRadar referential use :
+
+```bash
+PS > python.exe .\OpenCTI_QRadar.py -d 2
+```
 
 ---
 
