@@ -20,76 +20,6 @@ def pprint(string, level):
 	else:
 		pass
 
-def check_module(module_name):
-
-	'''
-	Function which check if module exists in your Python environment using "util".
-
-		Paremeters:
-			module_name (str): Name of the module you want to check
-
-		Returns:
-			int: 0 if exists, 1 otherwise.
-	'''
-
-	exists = util.find_spec(module_name) is not None
-	if not exists:
-		pprint(""" Module "{0}" does not exist """.format(module_name).center(100, '!'), "ERROR")
-		return 1
-	pprint(""" Module "{0}" does exist """.format(module_name).center(100, '-'), "DEBUG")
-	return 0
-
-def do_import(modules_list):
-
-	"""
-	Function which check if all modules sent in parameters can be import with success.
-
-		Parameters:
-			modules_list (list): List of all modules name you want to check
-
-		Returns:
-			bool: True if all modules can be imported successfully, False otherwise.
-	"""
-
-	for module in modules_list:
-		try:
-			exec("import {0}".format(module))
-		except Exception as error:
-			pprint(""" Error importing {0}'s module. Check the error bellow : """.format(module).center(100, '!'), "ERROR")
-			pprint(""" {0} """.format(error.msg).center(100, ' '), "ERROR")
-			return False
-		else:
-			pprint(""" Module {0} can be imported """.format(module).center(100, '-'), "DEBUG")
-	return True
-
-def check_import(modules_list):
-
-	'''
-	Function which check if all modules sent in parameters exists in your Python environment using check_module() function.
-
-		Parameters:
-			modules_list (list): List of all modules name you want to check
-
-		Return:
-			bool: True if all modules exist and can be imported successfully, False otherwise.
-	'''
-
-	# Use validation incremental int to check if every module in the list is installed. If validation >= 1, it means that one or more module is not OK.
-
-	validation = 0
-	for module in modules_list:
-		validation += check_module(module)
-
-	if validation != 0:
-		pprint(""" One or more module does not exist """.center(100, '!'), "ERROR")
-		return False
-	pprint(""" Modules installation : Success """.center(100, '-'), "DEBUG")
-
-	if do_import(modules_list):
-		pprint(""" Modules importation : Success """.center(100, '-'), "DEBUG")
-		return True
-	pprint(""" Module importation : Failed """.center(100, '!'), "ERROR")
-
 def get_OpenCTI_IPv4(flag = "", filters = "[]", IPs = {}, progress_bar = None):
 
 	"""
@@ -112,9 +42,6 @@ def get_OpenCTI_IPv4(flag = "", filters = "[]", IPs = {}, progress_bar = None):
 					"127.0.0.1": {"score": 50}
 				}
 	"""
-
-	import requests, variables, secrets, json
-	from tqdm import tqdm
 
 	# If/Else to display debug information on the first recursion
 	if flag == "":
@@ -190,10 +117,14 @@ def get_OpenCTI_IPv4(flag = "", filters = "[]", IPs = {}, progress_bar = None):
 	}
 	"""
 
-	# Retrieve macro datas of the response
-	OpenCTI_request_hasNextPage = OpenCTI_request_json["data"]["stixCyberObservables"]["pageInfo"]["hasNextPage"]
-	OpenCTI_request_elementsCount = len(OpenCTI_request_json["data"]["stixCyberObservables"]["edges"])
-	OpenCTI_request_globalCount = OpenCTI_request_json["data"]["stixCyberObservables"]["pageInfo"]["globalCount"]
+
+	# Retrieve macro datas of the response and eventuals errors
+	try :
+		OpenCTI_request_hasNextPage = OpenCTI_request_json["data"]["stixCyberObservables"]["pageInfo"]["hasNextPage"]
+		OpenCTI_request_elementsCount = len(OpenCTI_request_json["data"]["stixCyberObservables"]["edges"])
+		OpenCTI_request_globalCount = OpenCTI_request_json["data"]["stixCyberObservables"]["pageInfo"]["globalCount"]
+	except KeyError as error:
+		pprint(""" Cannot find the key : {0} """.format(error).center(100, '!'), "ERROR")
 
 	# If/Else to display debug information on the first recursion and use the correct progress bar init
 	if flag == "":
@@ -202,6 +133,7 @@ def get_OpenCTI_IPv4(flag = "", filters = "[]", IPs = {}, progress_bar = None):
 	else:
 		progress_bar_tmp = progress_bar
 
+	
 	# Make a copy of the aggregate IPv4 dict so you can add datas
 	IPs_tmp = IPs.copy()
 
@@ -226,7 +158,7 @@ def get_OpenCTI_IPv4(flag = "", filters = "[]", IPs = {}, progress_bar = None):
 		return get_OpenCTI_IPv4(OpenCTI_request_endCursor, filters, IPs_tmp, progress_bar_tmp)
 
 	# For the boolean returns value, we check if the number of keys in the dict is the same as the number return in the API response
-	return (True and (len(IPs_tmp.keys()) == OpenCTI_request_globalCount)), IPs_tmp
+	return (len(IPs_tmp.keys()) == OpenCTI_request_globalCount), IPs_tmp
 
 def get_QRadar_IPv4(map_name = "Malicious - IP"):
 
@@ -247,8 +179,6 @@ def get_QRadar_IPv4(map_name = "Malicious - IP"):
 					"127.0.0.1": 50
 				}
 	"""
-
-	import requests, variables, secrets, json, urllib3
 	
 	# Ignore SSL Warning
 	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning) 
@@ -275,7 +205,8 @@ def get_QRadar_IPv4(map_name = "Malicious - IP"):
 		return False, {}
 
 	# Converting request response to json format
-	QRadar_request_json = json.loads(QRadar_request.text)
+	# QRadar_request_json = json.loads(QRadar_request.text)
+	QRadar_request_json = QRadar_request.json()
 
 	"""
 	Response format example :
@@ -321,8 +252,6 @@ def upload_IPv4_to_QRadar(IPs_to_upload, map_name = "Malicious - IP"):
 		Returns:
 			bool: True if execution is successful, False otherwise.
 	"""
-
-	import requests, variables, secrets, urllib3
 
 	# Ignore SSL Warning
 	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -394,9 +323,6 @@ def delete_QRadar_IPv4(IPs_to_delete, IPs_in_QRadar, map_name = "Malicious - IP"
 			bool: True if execution is successful, False otherwise.
 	"""
 
-	import requests, variables, secrets, urllib3
-	from tqdm import tqdm
-
 	# Ignore SSL Warning
 	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 	pprint(""" URL requested : {0}""".format(variables.QRadar_URL.format("")).center(100, '-'), "DEBUG")
@@ -452,8 +378,6 @@ def verifiy_IPv4_score(IPs_to_verify, map_name = "Malicious - IP"):
 		Returns:
 			bool: True if execution is successful, False otherwise.
 	"""
-
-	import variables
 
 	# Format OpenCTI filter and replace single quote with double, here an example : ["IP1", "IP2"]
 	OpenCTI_request_filters = variables.IP_query_filter.format(str([IP for IP in IPs_to_verify.keys()])).replace('\'', '\"')
@@ -515,15 +439,13 @@ def main(ndays = 1):
 
 	# First step, check modules installation state
 
-	pprint(" Modules checks ".center(100, "="), "INFO")
-	module_list = ["requests", "json", "secrets", "variables", "tqdm", "urllib3", "datetime"]
-	check_import_execution = check_import(module_list)
-	if not check_import_execution:
-		pprint(""" Modules checks : Failed """.center(100, '!'), "ERROR")
-		return
-	pprint(""" Modules checks : Success """.center(100, '='), "INFO")
-
-	import variables, datetime
+	# pprint(" Modules checks ".center(100, "="), "INFO")
+	# module_list = ["requests", "json", "secrets", "variables", "tqdm", "urllib3", "datetime"]
+	# check_import_execution = check_import(module_list)
+	# if not check_import_execution:
+	# 	pprint(""" Modules checks : Failed """.center(100, '!'), "ERROR")
+	# 	return
+	# pprint(""" Modules checks : Success """.center(100, '='), "INFO")
 
 	# Second step, get QRadar IPv4 list
 
@@ -577,8 +499,13 @@ if __name__ == '__main__':
 	else:
 		DEBUG = program_args.verbosity
 	
+module_list = ["requests", "json", "secrets", "variables", "tqdm", "urllib3", "datetime"]
+try:
+	from tqdm import tqdm
+	import requests, json, secrets, variables, urllib3, datetime
+except Exception as e:
+	pprint(""" {0} """.format(e).center(100, '!'), "ERROR")
+else:
 	pprint(""" Script start """.center(100, "="), "INFO")
-
 	main(ndays=program_args.ndays)
-
 	pprint(""" Script end """.center(100, "="), "INFO")
