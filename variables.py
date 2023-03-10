@@ -1,6 +1,6 @@
 OpenCTI_URL = """https://demo.opencti.io/graphql"""
-QRadar_URL = """https://<QRadar_URL>/api/{0}"""
-QRadar_referential_name = "<QRadar_referential_name>"
+QRadar_URL = """https://192.168.1.174/api/{0}"""
+QRadar_referential_name = "TEST_IP"
 
 QRadar_headers = """{{
     'SEC':'{0}',
@@ -32,7 +32,7 @@ query_IPv4 = """query {{
         updated_at
         observable_value
         x_opencti_score
-        creator {{
+        creators {{
           entity_type
           name
         }}
