@@ -2,7 +2,7 @@
 
 ### Versions status :
 
-+ 1.0 : March 2023 :calendar:
++ 1.0 : March 2023 :white_check_mark:
 + 1.1 : March 2023 :calendar:
   + Implementation of requirements file
   + Review of examples in the readme
